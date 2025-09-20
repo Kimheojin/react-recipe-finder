@@ -3,9 +3,9 @@ import "./App.css";
 function App() {
   return (
     <>
-      <div>초기 설저 test</div>
-      <div>초기 설저 test</div>
-      <div>초기 설저 test</div>
+      <h1>초기 설정 test</h1>
+      <h1>초기 설정 test</h1>
+      <h1>초기 설정 test</h1>
     </>
   );
 }
