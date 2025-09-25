@@ -1,0 +1,6 @@
+
+
+@singleton()
+export default HttpRepository(
+    
+)
