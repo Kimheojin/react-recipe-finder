@@ -1,5 +1,5 @@
 import type SingleRecipeResponse from "../../data/recipe/SingleRecipeResponse";
 
-export default interface ListRecipeResponse {
+export default interface ListSearchRecipeResponse {
     recipes: SingleRecipeResponse[];
 }

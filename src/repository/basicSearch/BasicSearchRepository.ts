@@ -1,6 +1,6 @@
 import { inject, singleton } from "tsyringe";
 import HttpRepository from "../http/HttpRepository";
-import type SingleRecipeResponse from "../../entity/basicSearch/response/SingleRecipeResponse";
+import type SingleRecipeResponse from "../../entity/data/recipe/SingleRecipeResponse";
 import type ListRecipeResponse from "../../entity/basicSearch/response/ListRecipeResponse";
 
 @singleton()
