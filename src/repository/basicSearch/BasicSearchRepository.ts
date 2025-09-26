@@ -1,7 +1,7 @@
 import { inject, singleton } from "tsyringe";
 import HttpRepository from "../http/HttpRepository";
-import type SingleRecipeResponse from "../../entity/autocomplete/response/SingleRecipeResponse";
-import type ListRecipeResponse from "../../entity/autocomplete/response/ListRecipeResponse";
+import type SingleRecipeResponse from "../../entity/basicSearch/response/SingleRecipeResponse";
+import type ListRecipeResponse from "../../entity/basicSearch/response/ListRecipeResponse";
 
 @singleton()
 export default class BasicSearchRepository {
