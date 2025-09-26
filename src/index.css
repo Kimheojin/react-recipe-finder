@@ -1,9 +1,10 @@
+/* 전역 초기화 + 기본 글꼴 정도만 */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'MaruBuri', Arial, sans-serif;
+    font-family: "MaruBuri", Arial, sans-serif;
 }
