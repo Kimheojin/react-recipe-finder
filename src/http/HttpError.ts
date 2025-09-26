@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import type { ErrorResponse } from "../entity/interface/ErrorResponse";
+import type ErrorResponse from "../entity/interface/ErrorResponse";
 
 export default class HttpError {
   private readonly statusCode: number;

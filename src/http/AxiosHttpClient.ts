@@ -1,7 +1,12 @@
-import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from "axios";
+import axios, {
+  AxiosError,
+  type AxiosInstance,
+  type AxiosResponse,
+} from "axios";
 import { singleton } from "tsyringe";
-import type { ErrorResponse } from "../entity/interface/ErrorResponse";
+
 import HttpError from "./HttpError";
+import type ErrorResponse from "../entity/interface/ErrorResponse";
 
 export type HttpRequestConfig = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
