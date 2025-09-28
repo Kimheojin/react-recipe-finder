@@ -1,9 +1,14 @@
-import { Input } from "@chakra-ui/react";
+import { Button, Input } from "@chakra-ui/react";
+import "./SearchInput.css";
+import AutocompleteSwitch from "./AutocompleteSwitch";
+import ComboBox from "./SearchBox";
 
 export default function SearchInput() {
     return (
         <>
-            <Input />
+            <div className="search-container"></div>
+            <ComboBox />
+            <AutocompleteSwitch />
         </>
     );
 }
