@@ -1,7 +1,7 @@
 import { Button, CloseButton, Dialog, Portal, VStack } from "@chakra-ui/react";
-import ConditionalRecipe from "./ConditionalRecipe";
-import AutocompleteSwitch from "./AutocompleteSwitch";
-import ViewAllbutton from "./ViewAllButton";
+import ConditionalRecipe from "./modal/ConditionalRecipe";
+import AutocompleteSwitch from "./modal/AutocompleteSwitch";
+import ViewAllbutton from "./modal/ViewAllButton";
 
 export default function SearchSettingsModal() {
     return (
