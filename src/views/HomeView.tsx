@@ -1,5 +1,5 @@
 import SearchInput from "../components/SearchInput";
-import ConditionalRecipe from "../components/ConditionalRecipe";
+import SearchSettingsModal from "../components/SearchSettingsModal";
 
 import { useState } from "react";
 
@@ -10,10 +10,7 @@ export default function HomeView() {
         <>
             <h1>HomeView + 라우터 부분</h1>
             <SearchInput />
-
-            <div>
-                <ConditionalRecipe />
-            </div>
+            <SearchSettingsModal />
         </>
     );
 }
