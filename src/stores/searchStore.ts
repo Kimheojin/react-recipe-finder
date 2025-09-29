@@ -16,7 +16,6 @@ export const useSearchStore = create<SearchStore>((set) => ({
     searchValue: "",
     settings: {
         autocompleteType: "recipename",
-        autocomplete: true,
         searchType: "recipename",
     },
     setSearchValue: (value) => set({ searchValue: value }),

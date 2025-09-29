@@ -25,7 +25,6 @@ export default function SearchBox() {
 
     // 변경 함수
     const setSearchValue = useSearchStore((state) => state.setSearchValue);
-    const updateSetting = useSearchStore((state) => state.updateSetting);
 
     const handleInputChange = (details: Combobox.InputValueChangeDetails) => {
         setCurrentInput(details.inputValue);
@@ -33,11 +32,14 @@ export default function SearchBox() {
 
     // 0.5초 디바운싱으로 자동완성 실행
     useEffect(() => {
-        if (currentInput.trim() === "") return;
+        if (currentInput.trim() === "" || settings.autocompleteType === "none") {
+            setAutocompleteResults([]);
+            return;
+        }
 
         const timer = setTimeout(async () => {
             try {
-                if (settings.autocompleteType == "recipename") {
+                if (settings.autocompleteType === "recipename") {
                     // recipename 기반
                     const result =
                         await AUTOCOMPLETE_REPO.recipeNameAutocomoplete(
@@ -47,7 +49,7 @@ export default function SearchBox() {
                         (item) => item.recipeName
                     );
                     setAutocompleteResults(names);
-                } else {
+                } else if (settings.autocompleteType === "ingredient") {
                     // 재료명 기반
                     const result =
                         await AUTOCOMPLETE_REPO.ingredientAutocomplete(
@@ -79,7 +81,7 @@ export default function SearchBox() {
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === 'Enter') {
+        if (event.key === "Enter") {
             event.preventDefault();
             handleSearch();
         }
@@ -98,9 +100,11 @@ export default function SearchBox() {
         >
             <div className="search-seo">
                 <Combobox.Label>
-                    {settings.autocompleteType === "recipename"
-                        ? "레시피 검색"
-                        : "재료 검색"}
+                    {settings.searchType === "recipename"
+                        ? "레시피 기반 통합 검색"
+                        : settings.searchType === "ingredient"
+                        ? "재료 기반 통합검색"
+                        : "조리순서 기반 통합검색"}
                 </Combobox.Label>
                 <div className="search-controls">
                     <Combobox.Control>
@@ -108,7 +112,9 @@ export default function SearchBox() {
                             placeholder={
                                 settings.autocompleteType === "recipename"
                                     ? "레시피 이름을 입력하세요"
-                                    : "재료 이름을 입력하세요"
+                                    : settings.autocompleteType === "ingredient"
+                                    ? "재료 이름을 입력하세요"
+                                    : "검색어를 입력하세요"
                             }
                             onKeyDown={handleKeyDown}
                         />
@@ -123,9 +129,11 @@ export default function SearchBox() {
             <Portal>
                 <Combobox.Positioner>
                     <Combobox.Content>
-                        <Combobox.Empty>
-                            일치하는 항목이 없습니다
-                        </Combobox.Empty>
+                        {settings.autocompleteType !== "none" && (
+                            <Combobox.Empty>
+                                일치하는 항목이 없습니다
+                            </Combobox.Empty>
+                        )}
                         {collection.items.map((item) => (
                             <Combobox.Item key={item} item={item}>
                                 <Combobox.ItemText>{item}</Combobox.ItemText>

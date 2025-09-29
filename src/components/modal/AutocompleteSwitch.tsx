@@ -12,19 +12,27 @@ export default function AutocompleteSwitch() {
     const autocompleteOptions: { value: AutocompleteType; label: string }[] = [
         { value: "recipename", label: "레시피명" },
         { value: "ingredient", label: "재료명" },
+        { value: "none", label: "자동완성 사용 안함" },
     ];
 
     return (
         <RadioGroup.Root
             value={settings.autocompleteType}
-            onValueChange={(details) => updateSetting("autocompleteType", details.value as AutocompleteType)}
+            onValueChange={(details) =>
+                updateSetting(
+                    "autocompleteType",
+                    details.value as AutocompleteType
+                )
+            }
         >
             <HStack gap="6">
                 {autocompleteOptions.map((option) => (
                     <RadioGroup.Item key={option.value} value={option.value}>
                         <RadioGroup.ItemHiddenInput />
                         <RadioGroup.ItemIndicator />
-                        <RadioGroup.ItemText>{option.label}</RadioGroup.ItemText>
+                        <RadioGroup.ItemText>
+                            {option.label}
+                        </RadioGroup.ItemText>
                     </RadioGroup.Item>
                 ))}
             </HStack>
