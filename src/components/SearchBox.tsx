@@ -48,9 +48,10 @@ export default function SearchBox() {
                         await AUTOCOMPLETE_REPO.recipeNameAutocomoplete(
                             currentInput
                         );
-                    const names = result.autocompleteRecipeNameDtoList.map(
-                        (item) => item.recipeName
+                    const sorted = result.autocompleteRecipeNameDtoList.sort(
+                        (a, b) => b.score - a.score
                     );
+                    const names = sorted.map((item) => item.recipeName);
                     setAutocompleteResults(names);
                 } else if (settings.autocompleteType === "ingredient") {
                     // 재료명 기반
@@ -58,9 +59,10 @@ export default function SearchBox() {
                         await AUTOCOMPLETE_REPO.ingredientAutocomplete(
                             currentInput
                         );
-                    const names = result.autocompleteDtoList.map(
-                        (item) => item.ingredient
+                    const sorted = result.autocompleteDtoList.sort(
+                        (a, b) => b.score - a.score
                     );
+                    const names = sorted.map((item) => item.ingredient);
                     setAutocompleteResults(names);
                 }
             } catch (error) {
