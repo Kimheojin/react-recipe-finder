@@ -2,10 +2,7 @@ import { Button, CloseButton, Dialog, Portal, VStack } from "@chakra-ui/react";
 import ConditionalRecipe from "./ConditionalRecipe";
 import AutocompleteSwitch from "./AutocompleteSwitch";
 
-
 export default function SearchSettingsModal() {
-
-
     return (
         <Dialog.Root>
             <Dialog.Trigger asChild>
@@ -22,7 +19,9 @@ export default function SearchSettingsModal() {
                         </Dialog.Header>
                         <Dialog.Body>
                             <VStack gap={6} align="center">
+                                <h1>통합 검색 조건</h1>
                                 <ConditionalRecipe />
+                                <h1>자동완성 조건</h1>
                                 <AutocompleteSwitch />
                             </VStack>
                         </Dialog.Body>
