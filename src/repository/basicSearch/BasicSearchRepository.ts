@@ -28,7 +28,7 @@ export default class BasicSearchRepository {
         objectId: string
     ): Promise<ListRecipeResponse> {
         return this.httpRepository.get<ListRecipeResponse>({
-            path: "/seo/basic/recipe",
+            path: "/seo/basic/recipes",
             params: {
                 page,
                 pageSize,
