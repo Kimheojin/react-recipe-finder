@@ -9,15 +9,15 @@ import { useSearchStore } from "../stores/searchStore";
 import { container } from "tsyringe";
 import AutocompleteRepository from "../repository/autocomplete/AutocompleteRepository";
 import { useState, useEffect, useMemo } from "react";
-import IntegratedSearchRepository from "../repository/integrated/IntegratedSearchRepository";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchBox() {
     const AUTOCOMPLETE_REPO = container.resolve(AutocompleteRepository);
-    const INTEGRATEDSEARCH_REPO = container.resolve(IntegratedSearchRepository);
     const [currentInput, setCurrentInput] = useState("");
     const [autocompleteResults, setAutocompleteResults] = useState<string[]>(
         []
     );
+    const navigate = useNavigate();
 
     // 상태?
     const searchValue = useSearchStore((state) => state.searchValue);
@@ -32,7 +32,10 @@ export default function SearchBox() {
 
     // 0.5초 디바운싱으로 자동완성 실행
     useEffect(() => {
-        if (currentInput.trim() === "" || settings.autocompleteType === "none") {
+        if (
+            currentInput.trim() === "" ||
+            settings.autocompleteType === "none"
+        ) {
             setAutocompleteResults([]);
             return;
         }
@@ -69,8 +72,10 @@ export default function SearchBox() {
         return () => clearTimeout(timer);
     }, [currentInput, settings.autocompleteType]);
 
+    // 검색 버튼 누를 시
     const handleSearch = () => {
         setSearchValue(currentInput);
+        navigate("/search-results");
         console.log("검색 실행:", currentInput);
     };
 
@@ -99,13 +104,7 @@ export default function SearchBox() {
             inputValue={currentInput}
         >
             <div className="search-seo">
-                <Combobox.Label>
-                    {settings.searchType === "recipename"
-                        ? "레시피 기반 통합 검색"
-                        : settings.searchType === "ingredient"
-                        ? "재료 기반 통합검색"
-                        : "조리순서 기반 통합검색"}
-                </Combobox.Label>
+                <Combobox.Label>검색 창</Combobox.Label>
                 <div className="search-controls">
                     <Combobox.Control>
                         <Combobox.Input

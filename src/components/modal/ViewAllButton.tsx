@@ -4,7 +4,7 @@ import "./ViewAllButton.css";
 export default function ViewAllbutton() {
     return (
         <>
-            <Button className="view-all-button">전체보기</Button>
+            <Button className="view-all-button">전체 레시피 보기</Button>
         </>
     );
 }
