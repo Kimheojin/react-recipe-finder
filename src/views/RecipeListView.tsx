@@ -3,6 +3,7 @@ import { container } from "tsyringe";
 import BasicSearchRepository from "../repository/basicSearch/BasicSearchRepository";
 import { useEffect, useState } from "react";
 import type ListRecipeResponse from "../entity/basicSearch/response/ListRecipeResponse";
+import "./RecipeListView.css";
 
 export default function RecipeListView() {
     const BASIC_SEARCH_REPO = container.resolve(BasicSearchRepository);
@@ -51,19 +52,30 @@ export default function RecipeListView() {
 
             <SearchResultList
                 searchValue=""
-                searchResults={recipeData}
+                searchResults={
+                    recipeData
+                        ? {
+                              totalCount: recipeData.recipes.length,
+                              totalPages: 1,
+                              currentPage: currentPage,
+                              pageSize: pageSize,
+                              recipes: recipeData.recipes,
+                          }
+                        : null
+                }
                 loading={loading}
                 error={error}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
             />
 
-            <div style={{ margin: "20px", textAlign: "center" }}>
+            <div className="recipe-list-pagination">
                 <button
                     onClick={() => {
                         setCurrentPage((p) => p - 1);
                         setPageOffset(-1);
                     }}
                     disabled={currentPage === 1}
-                    style={{ marginRight: "10px", padding: "8px 16px" }}
                 >
                     이전
                 </button>
@@ -74,7 +86,6 @@ export default function RecipeListView() {
                         setPageOffset(1);
                     }}
                     disabled={!recipeData || recipeData.recipes.length === 0}
-                    style={{ marginLeft: "10px", padding: "8px 16px" }}
                 >
                     다음
                 </button>

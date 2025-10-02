@@ -1,0 +1,16 @@
+.recipe-list-pagination {
+    margin: 20px;
+    text-align: center;
+}
+
+.recipe-list-pagination button {
+    padding: 8px 16px;
+}
+
+.recipe-list-pagination button:first-of-type {
+    margin-right: 10px;
+}
+
+.recipe-list-pagination button:last-of-type {
+    margin-left: 10px;
+}

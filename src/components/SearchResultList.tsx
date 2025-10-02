@@ -1,5 +1,6 @@
 import type ListSearchRecipeResponse from "../entity/integratedSearch/response/ListSearchRecipeResponse";
 import type SingleRecipeResponse from "../entity/data/recipe/SingleRecipeResponse";
+import "./SearchResultList.css";
 
 interface SearchResultListProps {
     searchValue: string;
@@ -12,36 +13,27 @@ interface SearchResultListProps {
 
 function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
     return (
-        <>
-            <div
-                key={recipe.objectId}
-                style={{
-                    border: "1px solid #ccc",
-                    margin: "10px",
-                    padding: "10px",
-                }}
-            >
-                <h3>{recipe.recipeName}</h3>
-                <p>출처: {recipe.siteIndex}</p>
-                <p>출처 url: {recipe.sourceUrl}</p>
-                <div>
-                    <h4>재료:</h4>
-                    <ul>
-                        {recipe.ingredientList?.map((ingredient, index) => (
-                            <li key={index}>{ingredient}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div>
-                    <h4>조리순서:</h4>
-                    <ol>
-                        {recipe.cookingOrderList?.map((step) => (
-                            <li key={step.step}>{step.instruction}</li>
-                        ))}
-                    </ol>
-                </div>
+        <div className="recipe-card" key={recipe.objectId}>
+            <h3>{recipe.recipeName}</h3>
+            <p>출처: {recipe.siteIndex}</p>
+            <p>출처 url: {recipe.sourceUrl}</p>
+            <div className="recipe-ingredients">
+                <h4>재료:</h4>
+                <ul>
+                    {recipe.ingredientList?.map((ingredient, index) => (
+                        <li key={index}>{ingredient}</li>
+                    ))}
+                </ul>
             </div>
-        </>
+            <div className="recipe-cooking-order">
+                <h4>조리순서:</h4>
+                <ol>
+                    {recipe.cookingOrderList?.map((step) => (
+                        <li key={step.step}>{step.instruction}</li>
+                    ))}
+                </ol>
+            </div>
+        </div>
     );
 }
 
@@ -58,7 +50,7 @@ export default function SearchResultList({
     }
 
     if (error) {
-        return <p style={{ color: "red" }}>{error}</p>;
+        return <p className="error-message">{error}</p>;
     }
 
     if (
@@ -78,21 +70,19 @@ export default function SearchResultList({
             ))}
 
             {/* 페이지네이션 */}
-            <div style={{ margin: "20px", textAlign: "center" }}>
+            <div className="pagination">
                 <button
                     onClick={() => onPageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    style={{ margin: "0 5px", padding: "5px 10px" }}
                 >
                     이전
                 </button>
-                <span style={{ margin: "0 10px" }}>
+                <span>
                     {currentPage} / {searchResults.totalPages}
                 </span>
                 <button
                     onClick={() => onPageChange(currentPage + 1)}
                     disabled={currentPage === searchResults.totalPages}
-                    style={{ margin: "0 5px", padding: "5px 10px" }}
                 >
                     다음
                 </button>
