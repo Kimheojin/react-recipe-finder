@@ -14,6 +14,8 @@ export default function SearchListView() {
         useState<ListSearchRecipeResponse | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [page, setPage] = useState(1);
+    const pageSize = 10; // 10으로 고정
 
     useEffect(() => {
         if (!searchValue || !settings.searchType) return;
@@ -26,15 +28,21 @@ export default function SearchListView() {
 
                 if (settings.searchType === "recipename") {
                     result = await INTEGRATEDSEARCH_REPO.integratedRecipeName(
+                        page,
+                        pageSize,
                         searchValue
                     );
                 } else if (settings.searchType === "ingredient") {
                     result = await INTEGRATEDSEARCH_REPO.integratedIngredient(
+                        page,
+                        pageSize,
                         searchValue
                     );
                 } else if (settings.searchType === "cookingorderlist") {
                     result =
                         await INTEGRATEDSEARCH_REPO.integratedCookingOrderList(
+                            page,
+                            pageSize,
                             searchValue
                         );
                 } else {
@@ -51,7 +59,7 @@ export default function SearchListView() {
         };
 
         fetchSearchResults();
-    }, [searchValue, settings.searchType]);
+    }, [searchValue, settings.searchType, page]);
 
     return (
         <>
@@ -63,6 +71,8 @@ export default function SearchListView() {
                 searchResults={searchResults}
                 loading={loading}
                 error={error}
+                currentPage={page}
+                onPageChange={setPage}
             />
         </>
     );

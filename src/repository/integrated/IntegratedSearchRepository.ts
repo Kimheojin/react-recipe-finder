@@ -8,6 +8,7 @@ export default class IntegratedSearchRepository {
         @inject(HttpRepository)
         private readonly httpRepository: HttpRepository
     ) {}
+    // pageSize 는 10으로 고정 될듯
 
     // 재료명 기반 통합 조회
     public async integratedIngredient(

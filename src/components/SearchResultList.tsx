@@ -6,6 +6,8 @@ interface SearchResultListProps {
     searchResults: ListSearchRecipeResponse | null;
     loading: boolean;
     error: string | null;
+    currentPage: number;
+    onPageChange: (page: number) => void;
 }
 
 function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
@@ -48,6 +50,8 @@ export default function SearchResultList({
     searchResults,
     loading,
     error,
+    currentPage,
+    onPageChange,
 }: SearchResultListProps) {
     if (loading) {
         return <p>검색 중...</p>;
@@ -67,11 +71,32 @@ export default function SearchResultList({
 
     return (
         <div>
-            <h2>검색 결과 ({searchResults.recipes.length}개)</h2>
+            <h2>검색 결과 (전체 {searchResults.totalCount}개)</h2>
             <h2>검색어 : ({searchValue}) </h2>
             {searchResults.recipes.map((recipe) => (
                 <RecipeCard key={recipe.objectId} recipe={recipe} />
             ))}
+
+            {/* 페이지네이션 */}
+            <div style={{ margin: "20px", textAlign: "center" }}>
+                <button
+                    onClick={() => onPageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    style={{ margin: "0 5px", padding: "5px 10px" }}
+                >
+                    이전
+                </button>
+                <span style={{ margin: "0 10px" }}>
+                    {currentPage} / {searchResults.totalPages}
+                </span>
+                <button
+                    onClick={() => onPageChange(currentPage + 1)}
+                    disabled={currentPage === searchResults.totalPages}
+                    style={{ margin: "0 5px", padding: "5px 10px" }}
+                >
+                    다음
+                </button>
+            </div>
         </div>
     );
 }
