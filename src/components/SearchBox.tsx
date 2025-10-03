@@ -1,9 +1,10 @@
 import {
     Combobox,
     Portal,
-    Button,
+    IconButton,
     createListCollection,
 } from "@chakra-ui/react";
+import { LuSearch } from "react-icons/lu";
 import "./SearchBox.css";
 import { useSearchStore } from "../stores/searchStore";
 import { container } from "tsyringe";
@@ -20,7 +21,6 @@ export default function SearchBox() {
     const navigate = useNavigate();
 
     // 상태?
-    const searchValue = useSearchStore((state) => state.searchValue);
     const settings = useSearchStore((state) => state.settings);
 
     // 변경 함수
@@ -106,10 +106,13 @@ export default function SearchBox() {
             inputValue={currentInput}
         >
             <div className="search-seo">
-                <Combobox.Label>검색 창</Combobox.Label>
+                <Combobox.Label className="search-label">
+                    검색 창
+                </Combobox.Label>
                 <div className="search-controls">
                     <Combobox.Control>
                         <Combobox.Input
+                            width="full"
                             placeholder={
                                 settings.autocompleteType === "recipename"
                                     ? "레시피 이름을 입력하세요"
@@ -123,7 +126,9 @@ export default function SearchBox() {
                             <Combobox.ClearTrigger />
                         </Combobox.IndicatorGroup>
                     </Combobox.Control>
-                    <Button onClick={handleSearch}>검색</Button>
+                    <IconButton aria-label="Search database" variant="outline" onClick={handleSearch}>
+                        <LuSearch />
+                    </IconButton>
                 </div>
             </div>
 
