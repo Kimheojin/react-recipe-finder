@@ -1,6 +1,6 @@
 import SearchBox from "./SearchBox";
-import SearchSettingsModal from "./modal/SearchSettingsModal";
-import ViewAllbutton from "./modal/ViewAllButton";
+import LeftTopHeader from "./LeftTopHeader";
+import RightTopHeader from "./RightTopHeader";
 import { useSearchStore } from "../stores/searchStore";
 import "./SearchHeader.css";
 
@@ -9,15 +9,15 @@ export default function SearchHeader() {
     return (
         <div className="search-header">
             <div className="search-header-top">
-                <ViewAllbutton />
+                <LeftTopHeader />
                 <SearchBox />
-                <SearchSettingsModal />
+                <RightTopHeader />
             </div>
 
-            <h1>
-                자동완성 타입 : {state2.autocompleteType} 통합검색 타입 :{" "}
-                {state2.searchType}
-            </h1>
+            <div className="search-header-footer">
+                통합검색 타입 : {state2.searchType} 자동완성 타입 :{" "}
+                {state2.autocompleteType}
+            </div>
         </div>
     );
 }

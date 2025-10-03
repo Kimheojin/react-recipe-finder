@@ -106,9 +106,6 @@ export default function SearchBox() {
             inputValue={currentInput}
         >
             <div className="search-seo">
-                <Combobox.Label className="search-label">
-                    검색 창
-                </Combobox.Label>
                 <div className="search-controls">
                     <Combobox.Control>
                         <Combobox.Input
@@ -126,7 +123,11 @@ export default function SearchBox() {
                             <Combobox.ClearTrigger />
                         </Combobox.IndicatorGroup>
                     </Combobox.Control>
-                    <IconButton aria-label="Search database" variant="outline" onClick={handleSearch}>
+                    <IconButton
+                        aria-label="Search database"
+                        variant="outline"
+                        onClick={handleSearch}
+                    >
                         <LuSearch />
                     </IconButton>
                 </div>
