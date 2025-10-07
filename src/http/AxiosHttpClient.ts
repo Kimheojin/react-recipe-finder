@@ -65,7 +65,7 @@ export default class AxiosHttpClient {
           e.response?.status,
           e.response?.data
         );
-        return Promise.reject(new HttpError(e));
+        return Promise.reject(new HttpError(e.response?.data as ErrorResponse));
       });
   }
 }
