@@ -1,5 +1,6 @@
 .right-top-header {
     display: flex;
-    gap: 4px;
+    gap: 12px;
     align-items: end;
+    margin-right: 10px;
 }

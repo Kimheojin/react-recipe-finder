@@ -1,6 +1,5 @@
-import { Button } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import "./ViewAllButton.css";
 
 export default function ViewAllbutton() {
     const navigate = useNavigate();
@@ -11,9 +10,9 @@ export default function ViewAllbutton() {
 
     return (
         <>
-            <Button className="view-all-button" onClick={handleClick}>
+            <Link variant="underline" onClick={handleClick}>
                 전체 레시피 보기
-            </Button>
+            </Link>
         </>
     );
 }

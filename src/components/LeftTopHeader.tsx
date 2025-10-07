@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/react";
 import "./LeftTopHeader.css";
 
 export default function LeftTopHeader() {
@@ -9,9 +9,9 @@ export default function LeftTopHeader() {
     };
     return (
         <div className="left-top-header">
-            <Button variant="outline" onClick={handelClck}>
+            <Link variant="underline" onClick={handelClck}>
                 Recipe Finder
-            </Button>
+            </Link>
         </div>
     );
 }

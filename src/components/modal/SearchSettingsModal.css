@@ -1,0 +1,17 @@
+.search-settings-header {
+    margin-bottom: 40px;
+}
+
+.search-settings-header h1 {
+    font-size: large;
+    font-weight: 600;
+}
+
+.search-settings-positioner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.search-settings-dialog-header {
+    margin: 10px;
+}
