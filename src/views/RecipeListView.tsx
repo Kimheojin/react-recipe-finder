@@ -3,7 +3,10 @@ import { container } from "tsyringe";
 import BasicSearchRepository from "../repository/basicSearch/BasicSearchRepository";
 import { useEffect, useState } from "react";
 import type ListRecipeResponse from "../entity/basicSearch/response/ListRecipeResponse";
+import type ErrorResponse from "../entity/interface/ErrorResponse";
 import "./RecipeListView.css";
+import SearchHeader from "../components/SearchHeader";
+import HttpError from "../http/HttpError";
 
 export default function RecipeListView() {
     const BASIC_SEARCH_REPO = container.resolve(BasicSearchRepository);
@@ -15,7 +18,21 @@ export default function RecipeListView() {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageOffset, setPageOffset] = useState(0);
     const [lastObjectId, setLastObjectId] = useState("");
+    const [totalCount, setTotalCount] = useState(0);
     const pageSize = 10;
+
+    useEffect(() => {
+        const fetchRecipeCount = async () => {
+            try {
+                const countData = await BASIC_SEARCH_REPO.getRecipeCount();
+                setTotalCount(countData.recipeCount);
+            } catch (err) {
+                console.error("레시피 개수 조회 에러:", err);
+            }
+        };
+
+        fetchRecipeCount();
+    }, []);
 
     useEffect(() => {
         const fetchRecipes = async () => {
@@ -36,8 +53,8 @@ export default function RecipeListView() {
                     setLastObjectId(lastRecipe.objectId);
                 }
             } catch (err) {
-                console.error("레시피 조회 에러:", err);
-                setError("레시피 조회 중 오류가 발생했습니다.");
+                const httpError = new HttpError(err as ErrorResponse);
+                setError(httpError.getMessage());
             } finally {
                 setLoading(false);
             }
@@ -47,7 +64,9 @@ export default function RecipeListView() {
     }, [currentPage]);
 
     return (
-        <div>
+        <>
+            <SearchHeader />
+
             <h1>전체 레시피 목록</h1>
 
             <SearchResultList
@@ -55,7 +74,7 @@ export default function RecipeListView() {
                 searchResults={
                     recipeData
                         ? {
-                              totalCount: recipeData.recipes.length,
+                              totalCount: totalCount,
                               totalPages: 1,
                               currentPage: currentPage,
                               pageSize: pageSize,
@@ -90,6 +109,6 @@ export default function RecipeListView() {
                     다음
                 </button>
             </div>
-        </div>
+        </>
     );
 }
