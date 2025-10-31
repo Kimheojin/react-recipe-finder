@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 제일 상위 css */
 
 body {
-    background-color: #faf3e0;
-    font-family: "Noto Sans KR", sans-serif;
+    background-color: #FAF3E0;
+    font-family: 'Noto Sans KR', sans-serif;
 }
