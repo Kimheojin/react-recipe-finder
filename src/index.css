@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+        h1, h2, h3, h4, h5, h6, p, blockquote, ul, ol, dl, dd {
+            margin: 0;
+        }
+        input {
+            padding: 0;
+        }
+    }
+
 /* 제일 상위 css */
 
 body {
