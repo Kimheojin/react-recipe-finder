@@ -1,4 +1,3 @@
-import { Link } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 export default function ViewAllbutton() {
@@ -10,9 +9,9 @@ export default function ViewAllbutton() {
 
     return (
         <>
-            <Link variant="underline" onClick={handleClick}>
+            <a onClick={handleClick} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
                 전체 레시피 보기
-            </Link>
+            </a>
         </>
     );
 }

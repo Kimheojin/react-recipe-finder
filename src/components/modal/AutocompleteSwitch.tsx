@@ -1,4 +1,3 @@
-import { HStack, RadioGroup } from "@chakra-ui/react";
 import { useSearchStore } from "../../stores/searchStore";
 import type { AutocompleteType } from "../../entity/types/search";
 
@@ -16,26 +15,28 @@ export default function AutocompleteSwitch() {
     ];
 
     return (
-        <RadioGroup.Root
-            value={settings.autocompleteType}
-            onValueChange={(details) =>
-                updateSetting(
-                    "autocompleteType",
-                    details.value as AutocompleteType
-                )
-            }
-        >
-            <HStack gap="6">
+        <div className="radio-group-root">
+            <div className="hstack">
                 {autocompleteOptions.map((option) => (
-                    <RadioGroup.Item key={option.value} value={option.value}>
-                        <RadioGroup.ItemHiddenInput />
-                        <RadioGroup.ItemIndicator />
-                        <RadioGroup.ItemText>
+                    <label key={option.value} className="radio-group-item">
+                        <input
+                            type="radio"
+                            name="autocompleteType"
+                            value={option.value}
+                            checked={settings.autocompleteType === option.value}
+                            onChange={(e) =>
+                                updateSetting(
+                                    "autocompleteType",
+                                    e.target.value as AutocompleteType
+                                )
+                            }
+                        />
+                        <span className="radio-group-item-text">
                             {option.label}
-                        </RadioGroup.ItemText>
-                    </RadioGroup.Item>
+                        </span>
+                    </label>
                 ))}
-            </HStack>
-        </RadioGroup.Root>
+            </div>
+        </div>
     );
 }

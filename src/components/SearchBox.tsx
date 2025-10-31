@@ -1,15 +1,9 @@
-import {
-    Combobox,
-    Portal,
-    IconButton,
-    createListCollection,
-} from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 import "./SearchBox.css";
 import { useSearchStore } from "../stores/searchStore";
 import { container } from "tsyringe";
 import AutocompleteRepository from "../repository/autocomplete/AutocompleteRepository";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function SearchBox() {
@@ -26,7 +20,7 @@ export default function SearchBox() {
     // 변경 함수
     const setSearchValue = useSearchStore((state) => state.setSearchValue);
 
-    const handleInputChange = (details: Combobox.InputValueChangeDetails) => {
+    const handleInputChange = (details: { inputValue: string }) => {
         setCurrentInput(details.inputValue);
     };
 
@@ -69,47 +63,50 @@ export default function SearchBox() {
                 console.error("자동완성 에러:", error);
                 setAutocompleteResults([]);
             }
-        }, 500);
+        }, 10);
 
         return () => clearTimeout(timer);
     }, [currentInput, settings.autocompleteType]);
 
     // 검색 버튼 누를 시
-    const handleSearch = () => {
-        setSearchValue(currentInput);
+    const handleSearch = (valueToSearch?: string) => {
+        const searchTerm = valueToSearch ?? currentInput;
+        setSearchValue(searchTerm);
         navigate("/search-results");
-        console.log("검색 실행:", currentInput);
+        console.log("검색 실행:", searchTerm);
     };
 
-    const handleValueChange = (details: Combobox.ValueChangeDetails) => {
+    const handleValueChange = (details: { value: string[] }) => {
+        console.log("handleValueChange triggered", details.value);
         if (details.value.length > 0) {
-            setCurrentInput(details.value[0]);
+            const selectedValue = details.value[0];
+            setCurrentInput(selectedValue);
+            handleSearch(selectedValue);
         }
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter") {
-            event.preventDefault();
-            handleSearch();
+            const activeItem = document.querySelector("[data-active]");
+            console.log("Enter pressed. Active item:", activeItem);
+            if (!activeItem) {
+                console.log("No active item, calling handleSearch()");
+                event.preventDefault();
+                handleSearch();
+            } else {
+                console.log("Active item found, letting Combobox handle it.");
+            }
         }
     };
-
-    const collection = useMemo(
-        () => createListCollection({ items: autocompleteResults }),
-        [autocompleteResults]
-    );
     return (
-        <Combobox.Root
-            collection={collection}
-            onInputValueChange={handleInputChange}
-            onValueChange={handleValueChange}
-            inputValue={currentInput}
+        <div
+            className="combobox-root"
         >
             <div className="search-seo">
                 <div className="search-controls">
-                    <Combobox.Control>
-                        <Combobox.Input
-                            width="full"
+                    <div className="combobox-control">
+                        <input
+                            className="combobox-input"
                             placeholder={
                                 settings.autocompleteType === "recipename"
                                     ? "레시피 이름을 입력하세요"
@@ -118,38 +115,34 @@ export default function SearchBox() {
                                     : "검색어를 입력하세요"
                             }
                             onKeyDown={handleKeyDown}
+                            value={currentInput}
+                            onChange={(e) => handleInputChange({ inputValue: e.target.value })}
                         />
-                        <Combobox.IndicatorGroup>
-                            <Combobox.ClearTrigger />
-                        </Combobox.IndicatorGroup>
-                    </Combobox.Control>
-                    <IconButton
+                    </div>
+                    <button
                         aria-label="Search database"
-                        variant="outline"
-                        onClick={handleSearch}
+                        className="icon-button"
+                        onClick={() => handleSearch()}
                     >
                         <LuSearch />
-                    </IconButton>
+                    </button>
                 </div>
             </div>
 
-            <Portal>
-                <Combobox.Positioner>
-                    <Combobox.Content>
-                        {settings.autocompleteType !== "none" && (
-                            <Combobox.Empty>
-                                일치하는 항목이 없습니다
-                            </Combobox.Empty>
-                        )}
-                        {collection.items.map((item) => (
-                            <Combobox.Item key={item} item={item}>
-                                <Combobox.ItemText>{item}</Combobox.ItemText>
-                                <Combobox.ItemIndicator />
-                            </Combobox.Item>
-                        ))}
-                    </Combobox.Content>
-                </Combobox.Positioner>
-            </Portal>
-        </Combobox.Root>
+            {settings.autocompleteType !== "none" && autocompleteResults.length > 0 && (
+                <div className="combobox-content">
+                    {autocompleteResults.map((item) => (
+                        <div key={item} className="combobox-item" onClick={() => handleValueChange({ value: [item] })}>
+                            <span className="combobox-item-text">{item}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
+            {settings.autocompleteType !== "none" && autocompleteResults.length === 0 && currentInput.length > 0 && (
+                <div className="combobox-empty">
+                    일치하는 항목이 없습니다
+                </div>
+            )}
+        </div>
     );
 }

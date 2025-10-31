@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { Link } from "@chakra-ui/react";
 import "./LeftTopHeader.css";
 
 export default function LeftTopHeader() {
@@ -9,9 +8,9 @@ export default function LeftTopHeader() {
     };
     return (
         <div className="left-top-header">
-            <Link variant="underline" onClick={handelClck}>
+            <a onClick={handelClck} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
                 Recipe Finder
-            </Link>
+            </a>
         </div>
     );
 }

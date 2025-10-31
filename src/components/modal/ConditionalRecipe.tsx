@@ -1,4 +1,3 @@
-import { HStack, RadioGroup } from "@chakra-ui/react";
 import { useSearchStore } from "../../stores/searchStore";
 import type { SearchType } from "../../entity/types/search";
 
@@ -16,19 +15,28 @@ export default function ConditionalRecipe() {
     ];
 
     return (
-        <RadioGroup.Root
-            value={settings.searchType}
-            onValueChange={(details) => updateSetting("searchType", details.value as SearchType)}
-        >
-            <HStack gap="6">
+        <div className="radio-group-root">
+            <div className="hstack">
                 {searchTypeOptions.map((option) => (
-                    <RadioGroup.Item key={option.value} value={option.value}>
-                        <RadioGroup.ItemHiddenInput />
-                        <RadioGroup.ItemIndicator />
-                        <RadioGroup.ItemText>{option.label}</RadioGroup.ItemText>
-                    </RadioGroup.Item>
+                    <label key={option.value} className="radio-group-item">
+                        <input
+                            type="radio"
+                            name="searchType"
+                            value={option.value}
+                            checked={settings.searchType === option.value}
+                            onChange={(e) =>
+                                updateSetting(
+                                    "searchType",
+                                    e.target.value as SearchType
+                                )
+                            }
+                        />
+                        <span className="radio-group-item-text">
+                            {option.label}
+                        </span>
+                    </label>
                 ))}
-            </HStack>
-        </RadioGroup.Root>
+            </div>
+        </div>
     );
 }
