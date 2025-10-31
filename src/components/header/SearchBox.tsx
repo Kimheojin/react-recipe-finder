@@ -13,6 +13,7 @@ export default function SearchBox() {
     const [autocompleteResults, setAutocompleteResults] = useState<string[]>(
         []
     );
+    const [activeIndex, setActiveIndex] = useState(-1);
     const navigate = useNavigate();
 
     // 상태?
@@ -27,6 +28,7 @@ export default function SearchBox() {
 
     // 0.5초 디바운싱으로 자동완성 실행
     useEffect(() => {
+        setActiveIndex(-1);
         if (
             currentInput.trim() === "" ||
             settings.autocompleteType === "none"
@@ -87,16 +89,40 @@ export default function SearchBox() {
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === "Enter") {
-            const activeItem = document.querySelector("[data-active]");
-            console.log("Enter pressed. Active item:", activeItem);
-            if (!activeItem) {
-                console.log("No active item, calling handleSearch()");
+        if (
+            settings.autocompleteType !== "none" &&
+            autocompleteResults.length > 0
+        ) {
+            if (event.key === "ArrowDown") {
                 event.preventDefault();
-                handleSearch();
-            } else {
-                console.log("Active item found, letting Combobox handle it.");
+                setActiveIndex((prevIndex) =>
+                    prevIndex === autocompleteResults.length - 1
+                        ? 0
+                        : prevIndex + 1
+                );
+            } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                setActiveIndex((prevIndex) =>
+                    prevIndex <= 0
+                        ? autocompleteResults.length - 1
+                        : prevIndex - 1
+                );
+            } else if (event.key === "Enter") {
+                event.preventDefault();
+                if (activeIndex > -1) {
+                    handleValueChange({
+                        value: [autocompleteResults[activeIndex]],
+                    });
+                } else {
+                    handleSearch();
+                }
+            } else if (event.key === "Escape") {
+                event.preventDefault();
+                setAutocompleteResults([]);
             }
+        } else if (event.key === "Enter") {
+            event.preventDefault();
+            handleSearch();
         }
     };
     return (
@@ -117,13 +143,14 @@ export default function SearchBox() {
                     >
                         <Form.Field
                             name="search"
-                            className="flex flex-row justify-center items-center gap-2"
+                            className="flex flex-row justify-center items-center gap-[12px] w-[384px]"
                         >
                             <Form.Control asChild>
                                 <input
-                                    className="h-10 px-3 border-2 border-gray-300 rounded-lg combobox-input"
+                                    className="h-[20px] px-[12px] border-[2px] border-gray-300 rounded-[8px] combobox-input w-full"
                                     placeholder={
-                                        settings.autocompleteType === "recipename"
+                                        settings.autocompleteType ===
+                                        "recipename"
                                             ? "레시피 이름을 입력하세요"
                                             : settings.autocompleteType ===
                                               "ingredient"
@@ -142,7 +169,7 @@ export default function SearchBox() {
                             <Form.Submit asChild>
                                 <button
                                     aria-label="Search database"
-                                    className="h-10 px-3 border-2 border-gray-300 rounded-lg icon-button"
+                                    className="h-[20px] px-[12px] border-[2px] border-gray-300 rounded-[8px] icon-button"
                                 >
                                     <LuSearch />
                                 </button>
@@ -154,15 +181,17 @@ export default function SearchBox() {
                     <Popover.Content
                         onOpenAutoFocus={(e) => e.preventDefault()}
                         sideOffset={5}
-                        className="combobox-content w-[--radix-popover-trigger-width]"
+                        className="combobox-content w-[384px] min-w-[384px] bg-white border border-gray-200 rounded-md shadow-lg"
                     >
-                        {autocompleteResults.map((item) => (
+                        {autocompleteResults.map((item, index) => (
                             <div
                                 key={item}
-                                className="combobox-item"
+                                className={`combobox-item`}
+                                style={{ backgroundColor: index === activeIndex ? 'lightgray' : 'white', color: index === activeIndex ? 'black' : 'inherit' }}
                                 onClick={() =>
                                     handleValueChange({ value: [item] })
                                 }
+                                onMouseEnter={() => setActiveIndex(index)}
                             >
                                 <span className="combobox-item-text">
                                     {item}
