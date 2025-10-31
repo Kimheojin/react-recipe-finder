@@ -1,7 +1,6 @@
 import type ListSearchRecipeResponse from "../entity/integratedSearch/response/ListSearchRecipeResponse";
 import type SingleRecipeResponse from "../entity/data/recipe/SingleRecipeResponse";
 import { useLocation } from "react-router-dom";
-import "./SearchResultList.css";
 
 interface SearchResultListProps {
     searchValue: string;
@@ -14,8 +13,8 @@ interface SearchResultListProps {
 
 function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
     return (
-        <div className="recipe-card" key={recipe.objectId}>
-            <h3>{recipe.recipeName}</h3>
+        <div className="border border-gray-300 m-2.5 p-2.5" key={recipe.objectId}>
+            <h3 className="mt-0">{recipe.recipeName}</h3>
             <p>
                 출처 url:{" "}
                 <a
@@ -32,8 +31,8 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
                 </p>
             </div>
             <div className="recipe-cooking-order">
-                <h4>조리순서:</h4>
-                <ol>
+                <h4 className="mb-2">조리순서:</h4>
+                <ol className="m-0 pl-5">
                     {recipe.cookingOrderList?.map((step) => (
                         <li key={step.step}>
                             {step.step}. {step.instruction}
@@ -62,7 +61,7 @@ export default function SearchResultList({
     }
 
     if (error) {
-        return <p className="error-message">{error}</p>;
+        return <p className="text-red-500">{error}</p>;
     }
 
     if (
@@ -83,19 +82,21 @@ export default function SearchResultList({
 
             {/* 페이지네이션 */}
             {!isRecipesPage && (
-                <div className="pagination">
+                <div className="m-5 text-center">
                     <button
                         onClick={() => onPageChange(currentPage - 1)}
                         disabled={currentPage === 1}
+                        className="mx-1 px-2.5 py-1.5"
                     >
                         이전
                     </button>
-                    <span>
+                    <span className="mx-2.5">
                         {currentPage} / {searchResults.totalPages}
                     </span>
                     <button
                         onClick={() => onPageChange(currentPage + 1)}
                         disabled={currentPage === searchResults.totalPages}
+                        className="mx-1 px-2.5 py-1.5"
                     >
                         다음
                     </button>

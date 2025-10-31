@@ -2,7 +2,6 @@ import SearchBox from "./SearchBox";
 import LeftTopHeader from "./LeftTopHeader";
 import RightTopHeader from "./RightTopHeader";
 import { useSearchStore } from "../stores/searchStore";
-import "./SearchHeader.css";
 
 export default function SearchHeader() {
     const state2 = useSearchStore((state) => state.settings);
@@ -20,14 +19,20 @@ export default function SearchHeader() {
     };
 
     return (
-        <div className="search-header">
-            <div className="search-header-top">
-                <LeftTopHeader />
-                <SearchBox />
-                <RightTopHeader />
+        <div className="flex flex-col my-2.5 w-full">
+            <div className="grid grid-cols-3 items-center gap-8 mb-2.5">
+                <div className="justify-self-start self-end">
+                    <LeftTopHeader />
+                </div>
+                <div className="justify-self-center">
+                    <SearchBox />
+                </div>
+                <div className="justify-self-end self-end">
+                    <RightTopHeader />
+                </div>
             </div>
 
-            <div className="search-header-footer">
+            <div className="flex justify-center">
                 통합검색 타입 :{" "}
                 {searchTypeMap[state2.searchType] || state2.searchType} /
                 자동완성 타입 :{" "}

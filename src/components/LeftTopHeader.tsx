@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import "./LeftTopHeader.css";
 
 export default function LeftTopHeader() {
     const navigate = useNavigate();
@@ -7,7 +6,7 @@ export default function LeftTopHeader() {
         navigate("/");
     };
     return (
-        <div className="left-top-header">
+        <div className="ml-2.5">
             <a onClick={handelClck} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
                 Recipe Finder
             </a>

@@ -1,6 +1,5 @@
 import ConditionalRecipe from "./ConditionalRecipe";
 import AutocompleteSwitch from "./AutocompleteSwitch";
-import "./SearchSettingsModal.css";
 import { useState } from "react";
 
 export default function SearchSettingsModal() {
@@ -16,16 +15,16 @@ export default function SearchSettingsModal() {
             {isOpen && (
                 <div className="portal">
                     <div className="dialog-backdrop" onClick={closeModal}></div>
-                    <div className="dialog-positioner search-settings-positioner">
+                    <div className="dialog-positioner flex items-center justify-center">
                         <div className="dialog-content">
-                            <div className="dialog-header search-settings-dialog-header">
+                            <div className="dialog-header m-2.5">
                                 <h2 className="dialog-title">검색 설정</h2>
                             </div>
                             <div className="dialog-body">
-                                <div className="vstack search-settings-header">
-                                    <h1>통합 검색 조건</h1>
+                                <div className="vstack mb-10">
+                                    <h1 className="text-lg font-semibold">통합 검색 조건</h1>
                                     <ConditionalRecipe />
-                                    <h1>자동완성 조건</h1>
+                                    <h1 className="text-lg font-semibold">자동완성 조건</h1>
                                     <AutocompleteSwitch />
                                 </div>
                             </div>

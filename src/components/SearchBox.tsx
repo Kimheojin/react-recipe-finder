@@ -1,5 +1,4 @@
 import { LuSearch } from "react-icons/lu";
-import "./SearchBox.css";
 import { useSearchStore } from "../stores/searchStore";
 import { container } from "tsyringe";
 import AutocompleteRepository from "../repository/autocomplete/AutocompleteRepository";
@@ -102,8 +101,8 @@ export default function SearchBox() {
         <div
             className="combobox-root"
         >
-            <div className="search-seo">
-                <div className="search-controls">
+            <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-row justify-center items-center gap-2">
                     <div className="combobox-control">
                         <input
                             className="combobox-input"
