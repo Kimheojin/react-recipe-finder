@@ -10,6 +10,8 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@radix-ui/react-form": "^0.1.8",
+        "@radix-ui/react-popover": "^1.1.15",
         "@tailwindcss/vite": "^4.1.16",
         "axios": "^1.12.2",
         "react": "^19.1.1",
