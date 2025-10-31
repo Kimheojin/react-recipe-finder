@@ -4,8 +4,8 @@ import BasicSearchRepository from "../repository/basicSearch/BasicSearchReposito
 import { useEffect, useState } from "react";
 import type ListRecipeResponse from "../entity/basicSearch/response/ListRecipeResponse";
 import type ErrorResponse from "../entity/interface/ErrorResponse";
-import "./RecipeListView.css";
-import SearchHeader from "../components/SearchHeader";
+
+import SearchHeader from "../components/header/SearchHeader";
 import HttpError from "../http/HttpError";
 
 export default function RecipeListView() {
@@ -88,8 +88,9 @@ export default function RecipeListView() {
                 onPageChange={setCurrentPage}
             />
 
-            <div className="recipe-list-pagination">
+            <div className="m-5 text-center">
                 <button
+                    className="py-2 px-4 mr-[10px]"
                     onClick={() => {
                         setCurrentPage((p) => p - 1);
                         setPageOffset(-1);
@@ -100,6 +101,7 @@ export default function RecipeListView() {
                 </button>
                 <span>페이지: {currentPage}</span>
                 <button
+                    className="py-2 px-4 ml-[10px]"
                     onClick={() => {
                         setCurrentPage((p) => p + 1);
                         setPageOffset(1);
