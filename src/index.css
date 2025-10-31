@@ -1,44 +1,5 @@
-/* Maru Buri ExtraLight */
-@font-face {
-    font-family: 'MaruBuri';
-    font-weight: 100;
-    font-style: normal;
-    src: url('https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2') format('woff2');
-}
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
 
-/* Maru Buri Light */
-@font-face {
-    font-family: 'MaruBuri';
-    font-weight: 300;
-    font-style: normal;
-    src: url('https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff2') format('woff2');
-}
-
-/* Maru Buri Regular */
-@font-face {
-    font-family: 'MaruBuri';
-    font-weight: 400;
-    font-style: normal;
-    src: url('https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff2') format('woff2');
-}
-
-/* Maru Buri SemiBold */
-@font-face {
-    font-family: 'MaruBuri';
-    font-weight: 600;
-    font-style: normal;
-    src: url('https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff2') format('woff2');
-}
-
-/* Maru Buri Bold */
-@font-face {
-    font-family: 'MaruBuri';
-    font-weight: 700;
-    font-style: normal;
-    src: url('https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2') format('woff2');
-}
-
-/* 전역 초기화 + 기본 글꼴 정도만 */
 * {
     margin: 0;
     padding: 0;
@@ -46,6 +7,6 @@
 }
 
 body {
-    background-color: #FAF3E0;
-    font-family: 'MaruBuri', sans-serif;
+    background-color: #faf3e0;
+    font-family: "Noto Sans KR", sans-serif;
 }
