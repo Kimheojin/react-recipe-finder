@@ -8,13 +8,7 @@ export default defineConfig(({ mode }) => {
     return {
         plugins: [react(), tailwindcss()],
         server: {
-            port: 1000,
-            proxy: {
-                "/seo": {
-                    target: env.VITE_PROXY_TARGET,
-                    changeOrigin: true,
-                },
-            },
+            port: 5173,
         },
     };
 });

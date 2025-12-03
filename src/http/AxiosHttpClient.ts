@@ -19,7 +19,7 @@ export type HttpRequestConfig = {
 @singleton()
 export default class AxiosHttpClient {
   private readonly client: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_PROXY_TARGET,
+    baseURL: import.meta.env.VITE_API_URL,
     timeout: 10000,
     timeoutErrorMessage: "시간 초과 입니다",
     withCredentials: false,

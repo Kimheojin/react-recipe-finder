@@ -1,4 +1,4 @@
-import SearchHeader from "../components/SearchHeader";
+import SearchHeader from "../components/header/SearchHeader";
 import SearchResultList from "../components/SearchResultList";
 import { useSearchStore } from "../stores/searchStore";
 import { container } from "tsyringe";

@@ -1,4 +1,4 @@
-import SearchHeader from "../components/SearchHeader";
+import SearchHeader from "../components/header/SearchHeader";
 
 export default function HomeView() {
     return <SearchHeader />;
