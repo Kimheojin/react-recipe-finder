@@ -22,7 +22,7 @@ export default class AxiosHttpClient {
     baseURL: import.meta.env.VITE_API_URL,
     timeout: 10000,
     timeoutErrorMessage: "시간 초과 입니다",
-    withCredentials: false,
+    withCredentials: true,
   });
 
   constructor() {
