@@ -51,7 +51,7 @@ export default class AxiosHttpClient {
       url: config.path,
       params: config.params,
       data: config.body,
-      withCredentials: false,
+      withCredentials: true,
     };
 
     return this.client
