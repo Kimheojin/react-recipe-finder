@@ -16,3 +16,8 @@
 ## 배포 환경
 
 -   GitHub + Vercel 기반 배포 환경
+
+
+### ui 프레임 워크 
+
+- radix + tailwind css
