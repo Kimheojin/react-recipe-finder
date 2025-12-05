@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { LuExternalLink, LuUtensils } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import type SingleRecipeResponse from "../entity/data/recipe/SingleRecipeResponse";
@@ -16,6 +17,82 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
   const ingredients = recipe.ingredientList ?? [];
   const steps = recipe.cookingOrderList ?? [];
   const topIngredients = ingredients.slice(0, 5);
+  const [showAllIngredients, setShowAllIngredients] = useState(false);
+  const [copyFeedback, setCopyFeedback] = useState<
+    "idle" | "copied" | "failed"
+  >("idle");
+  const displayedIngredients = showAllIngredients ? ingredients : topIngredients;
+  const hasMoreIngredients = ingredients.length > topIngredients.length;
+
+  useEffect(() => {
+    if (copyFeedback === "idle") {
+      return;
+    }
+    const timer = window.setTimeout(() => setCopyFeedback("idle"), 2000);
+    return () => window.clearTimeout(timer);
+  }, [copyFeedback]);
+
+  const fallbackCopy = (text: string) => {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.top = "0";
+    textarea.style.left = "0";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  };
+
+  const buildRecipeText = () => {
+    const lines: string[] = [];
+    lines.push(`레시피: ${recipe.recipeName}`);
+    if (recipe.siteIndex) {
+      lines.push(`출처 구분: ${recipe.siteIndex}`);
+    }
+    if (recipe.sourceUrl) {
+      lines.push(`원문 링크: ${recipe.sourceUrl}`);
+    }
+    if (ingredients.length > 0) {
+      lines.push(`재료 (${ingredients.length}개): ${ingredients.join(", ")}`);
+    }
+    if (steps.length > 0) {
+      lines.push("조리 순서:");
+      steps.forEach((step) => {
+        lines.push(`${step.step}. ${step.instruction}`);
+      });
+    }
+    return lines.join("\n");
+  };
+
+  const handleCopySource = async () => {
+    const recipeText = buildRecipeText();
+
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(recipeText);
+      } else {
+        fallbackCopy(recipeText);
+      }
+      setCopyFeedback("copied");
+    } catch {
+      try {
+        fallbackCopy(recipeText);
+        setCopyFeedback("copied");
+      } catch {
+        setCopyFeedback("failed");
+      }
+    }
+  };
+
+  const copyButtonLabel =
+    copyFeedback === "copied"
+      ? "복사됨!"
+      : copyFeedback === "failed"
+      ? "복사 실패"
+      : "레시피 복사";
 
   return (
     <article className="surface-card p-6 shadow-sm">
@@ -28,20 +105,36 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
             {recipe.recipeName}
           </h3>
         </div>
-        <a
-          href={recipe.sourceUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-[#d7dbe2] px-4 py-2 text-sm font-semibold text-[#1f2329] transition hover:border-[#2f5bda] hover:text-[#2f5bda]"
-        >
-          원문 보기
-          <LuExternalLink />
-        </a>
+        <div className="flex flex-wrap items-center gap-2">
+          <a
+            href={recipe.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-[#d7dbe2] px-4 py-2 text-sm font-semibold text-[#1f2329] transition hover:border-[#2f5bda] hover:text-[#2f5bda]"
+          >
+            원문 보기
+            <LuExternalLink />
+          </a>
+          <button
+            type="button"
+            onClick={handleCopySource}
+            className={`inline-flex items-center rounded-full border px-4 py-2 text-sm font-semibold transition ${
+              copyFeedback === "failed"
+                ? "border-red-300 text-red-600"
+                : "border-[#d7dbe2] text-[#1f2329] hover:border-[#2f5bda] hover:text-[#2f5bda]"
+            } ${
+              copyFeedback === "copied" ? "bg-[#eef3ff] text-[#1f2329]" : ""
+            }`}
+            aria-live="polite"
+          >
+            {copyButtonLabel}
+          </button>
+        </div>
       </div>
 
-      {topIngredients.length > 0 && (
+      {ingredients.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
-          {topIngredients.map((ingredient) => (
+          {displayedIngredients.map((ingredient) => (
             <span
               key={`${recipe.objectId}-${ingredient}`}
               className="pill bg-[#eef3ff] text-[#1f2329]"
@@ -49,10 +142,16 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
               {ingredient}
             </span>
           ))}
-          {ingredients.length > topIngredients.length && (
-            <span className="pill bg-[#f5f6f8] text-[#5d636f]">
-              +{ingredients.length - topIngredients.length}
-            </span>
+          {hasMoreIngredients && (
+            <button
+              type="button"
+              onClick={() => setShowAllIngredients((prev) => !prev)}
+              className="pill bg-[#f5f6f8] text-[#5d636f] transition hover:bg-[#eef1f6]"
+            >
+              {showAllIngredients
+                ? "재료 접기"
+                : `+${ingredients.length - topIngredients.length} 더 보기`}
+            </button>
           )}
         </div>
       )}
@@ -66,9 +165,9 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
             {steps.map((step) => (
               <li
                 key={`${recipe.objectId}-${step.step}`}
-                className="flex gap-3"
+                className="flex items-start gap-3"
               >
-                <span className="pill bg-[#2f5bda] text-white">
+                <span className="pill bg-[#2f5bda] text-white flex-shrink-0">
                   {step.step}
                 </span>
                 <p className="leading-6">{step.instruction}</p>
