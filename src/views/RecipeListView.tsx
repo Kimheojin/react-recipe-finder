@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { container } from "tsyringe";
 import SearchHeader from "../components/header/SearchHeader";
 import SearchResultList from "../components/SearchResultList";
+import ScrollToTopButton from "../components/ScrollToTopButton";
 import type ListRecipeResponse from "../entity/basicSearch/response/ListRecipeResponse";
 import type ErrorResponse from "../entity/interface/ErrorResponse";
 import BasicSearchRepository from "../repository/basicSearch/BasicSearchRepository";
@@ -108,6 +109,7 @@ export default function RecipeListView() {
           </button>
         </div>
       </div>
+      <ScrollToTopButton />
     </div>
   );
 }

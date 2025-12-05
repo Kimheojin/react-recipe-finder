@@ -106,15 +106,6 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
           </h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <a
-            href={recipe.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-[#d7dbe2] px-4 py-2 text-sm font-semibold text-[#1f2329] transition hover:border-[#2f5bda] hover:text-[#2f5bda]"
-          >
-            원문 보기
-            <LuExternalLink />
-          </a>
           <button
             type="button"
             onClick={handleCopySource}
@@ -129,6 +120,15 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
           >
             {copyButtonLabel}
           </button>
+          <a
+            href={recipe.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-[#d7dbe2] px-4 py-2 text-sm font-semibold text-[#1f2329] transition hover:border-[#2f5bda] hover:text-[#2f5bda]"
+          >
+            원문 보기
+            <LuExternalLink />
+          </a>
         </div>
       </div>
 
@@ -156,23 +156,25 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
         </div>
       )}
 
-      {steps.length > 0 && (
+      {steps.some((step) => step.instruction?.trim()) && (
         <div className="mt-6 rounded-2xl border border-[#eef0f4] bg-[#f9fafb] p-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-[#1f2329]">
             <LuUtensils /> 조리 순서
           </div>
           <ol className="mt-3 space-y-3 text-sm text-[#4b505b]">
-            {steps.map((step) => (
-              <li
-                key={`${recipe.objectId}-${step.step}`}
-                className="flex items-start gap-3"
-              >
-                <span className="pill bg-[#2f5bda] text-white flex-shrink-0">
-                  {step.step}
-                </span>
-                <p className="leading-6">{step.instruction}</p>
-              </li>
-            ))}
+            {steps
+              .filter((step) => step.instruction?.trim())
+              .map((step) => (
+                <li
+                  key={`${recipe.objectId}-${step.step}`}
+                  className="flex items-start gap-3"
+                >
+                  <span className="pill bg-[#2f5bda] text-white flex-shrink-0">
+                    {step.step}
+                  </span>
+                  <p className="leading-6">{step.instruction}</p>
+                </li>
+              ))}
           </ol>
         </div>
       )}
@@ -190,6 +192,10 @@ export default function SearchResultList({
 }: SearchResultListProps) {
   const location = useLocation();
   const isRecipesPage = location.pathname === "/recipes";
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   if (loading) {
     return (

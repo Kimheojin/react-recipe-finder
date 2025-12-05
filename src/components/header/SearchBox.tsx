@@ -74,6 +74,7 @@ export default function SearchBox() {
   const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [forceClosePopover, setForceClosePopover] = useState(false);
   const navigate = useNavigate();
   const settings = useSearchStore((state) => state.settings);
   const setSearchValue = useSearchStore((state) => state.setSearchValue);
@@ -171,11 +172,16 @@ export default function SearchBox() {
       setSearchValue(searchTerm);
       persistRecentTerm(searchTerm);
       navigate("/search-results");
+      setAutocompleteResults([]);
+      setIsFetching(false);
+      setErrorMessage(null);
+      setForceClosePopover(true);
     },
     [currentInput, navigate, persistRecentTerm, setSearchValue]
   );
 
   const handleValueChange = (value: string) => {
+    setForceClosePopover(true);
     setCurrentInput(value);
     handleSearch(value);
   };
@@ -238,12 +244,16 @@ export default function SearchBox() {
   const shouldShowPopover =
     settings.autocompleteType !== "none" &&
     currentInput.length > 0 &&
-    (isFetching || autocompleteResults.length > 0 || !!errorMessage);
+    (isFetching || autocompleteResults.length > 0 || !!errorMessage) &&
+    !forceClosePopover;
 
   const hasRecentTerms = recentTerms.length > 0;
 
   return (
     <div className="w-full">
+      <div className="mb-1 text-xs font-semibold text-[#5d636f]">
+        {autocompleteModeLabel}
+      </div>
       <Popover.Root open={shouldShowPopover}>
         <Popover.Trigger asChild>
           <Form.Root
@@ -260,7 +270,10 @@ export default function SearchBox() {
                     className="h-12 w-full rounded-xl border border-[#d7dbe2] bg-white px-4 pr-24 text-base text-[#1f2329] shadow-sm placeholder:text-[#9aa0ac] focus:border-[#2f5bda] focus:outline-none focus:ring-2 focus:ring-[#d2defd]"
                     placeholder={placeholderText}
                     value={currentInput}
-                    onChange={(event) => setCurrentInput(event.target.value)}
+                    onChange={(event) => {
+                      setForceClosePopover(false);
+                      setCurrentInput(event.target.value);
+                    }}
                     onKeyDown={handleKeyDown}
                   />
                 </Form.Control>
@@ -268,12 +281,13 @@ export default function SearchBox() {
                   <button
                     type="button"
                     aria-label="검색어 지우기"
-                    className="absolute right-12 top-1/2 flex -translate-y-1/2 items-center justify-center rounded-full p-2 text-[#8a909d] hover:bg-[#eef1f6]"
+                    className="absolute right-16 top-1/2 flex -translate-y-1/2 items-center justify-center rounded-full p-2 text-[#8a909d] hover:bg-[#eef1f6]"
                     onClick={() => {
                       setCurrentInput("");
                       setAutocompleteResults([]);
                       setIsFetching(false);
                       setErrorMessage(null);
+                      setForceClosePopover(false);
                     }}
                   >
                     <LuX />
@@ -297,7 +311,6 @@ export default function SearchBox() {
           <span>{currentSearchTypeLabel}</span>
           <span>{instructionText}</span>
         </div>
-        <div className="mt-1 text-xs text-[#8a909d]">{autocompleteModeLabel}</div>
 
         <Popover.Portal>
           <Popover.Content

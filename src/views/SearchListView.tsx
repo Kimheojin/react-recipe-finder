@@ -3,6 +3,7 @@ import { container } from "tsyringe";
 import SearchHeader from "../components/header/SearchHeader";
 import SearchResultList from "../components/SearchResultList";
 import type ListSearchRecipeResponse from "../entity/integratedSearch/response/ListSearchRecipeResponse";
+import ScrollToTopButton from "../components/ScrollToTopButton";
 import IntegratedSearchRepository from "../repository/integrated/IntegratedSearchRepository";
 import { useSearchStore } from "../stores/searchStore";
 
@@ -81,6 +82,7 @@ export default function SearchListView() {
           검색어를 입력하면 맞춤 레시피를 추천해 드릴게요.
         </div>
       )}
+      <ScrollToTopButton />
     </div>
   );
 }
