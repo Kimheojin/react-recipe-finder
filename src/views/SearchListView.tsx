@@ -18,6 +18,10 @@ export default function SearchListView() {
   const pageSize = 10;
 
   useEffect(() => {
+    setPage(1);
+  }, [searchValue, settings.searchType]);
+
+  useEffect(() => {
     if (!searchValue || !settings.searchType) return;
 
     const fetchSearchResults = async () => {
