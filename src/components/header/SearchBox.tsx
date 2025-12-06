@@ -222,10 +222,10 @@ export default function SearchBox() {
 
   const placeholderText = useMemo(() => {
     if (settings.autocompleteType === "recipename") {
-      return "예: 감바스, 불고기, 김치볶음밥";
+      return "예: 스파게티, 라면, 김치볶음밥";
     }
     if (settings.autocompleteType === "ingredient") {
-      return "예: 버섯, 토마토, 닭가슴살";
+      return "예: 닭가슴살, 토마토";
     }
     return "찾고 싶은 레시피나 재료를 입력하세요";
   }, [settings.autocompleteType]);
@@ -251,10 +251,11 @@ export default function SearchBox() {
 
   return (
     <div className="w-full">
-      <div className="mb-1 text-xs font-semibold text-[#5d636f]">
-        {autocompleteModeLabel}
-      </div>
-      <Popover.Root open={shouldShowPopover}>
+      <div className="flex flex-col gap-4">
+        <div className="text-xs font-semibold text-[#5d636f]">
+          자동 완성 종류 : {autocompleteModeLabel}
+        </div>
+        <Popover.Root open={shouldShowPopover}>
         <Popover.Trigger asChild>
           <Form.Root
             className="w-full"
@@ -307,8 +308,8 @@ export default function SearchBox() {
           </Form.Root>
         </Popover.Trigger>
 
-        <div className="mt-2 flex flex-wrap items-center justify-between text-xs text-[#8a909d]">
-          <span>{currentSearchTypeLabel}</span>
+        <div className="flex flex-wrap items-center justify-between rounded-lg bg-[#f5f7fb] text-xs font-medium text-[#5d636f] shadow-sm">
+          <span>통합 검색 조건 : {currentSearchTypeLabel}</span>
           <span>{instructionText}</span>
         </div>
 
@@ -384,5 +385,6 @@ export default function SearchBox() {
         </Popover.Portal>
       </Popover.Root>
     </div>
+  </div>
   );
 }

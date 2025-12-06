@@ -48,7 +48,7 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
 
   const buildRecipeText = () => {
     const lines: string[] = [];
-    lines.push(`레시피: ${recipe.recipeName}`);
+    lines.push(`레시피 이름: ${recipe.recipeName}`);
     if (recipe.siteIndex) {
       lines.push(`출처 구분: ${recipe.siteIndex}`);
     }
