@@ -270,6 +270,7 @@ export default function SearchBox() {
                   <input
                     className="h-12 w-full rounded-xl border border-[#d7dbe2] bg-white px-4 pr-24 text-base text-[#1f2329] shadow-sm placeholder:text-[#9aa0ac] focus:border-[#2f5bda] focus:outline-none focus:ring-2 focus:ring-[#d2defd]"
                     placeholder={placeholderText}
+                    spellCheck={false}
                     value={currentInput}
                     onChange={(event) => {
                       setForceClosePopover(false);
