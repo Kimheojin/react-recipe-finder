@@ -1,7 +1,7 @@
 # React Recipe Finder
 
 - CSR 구조 Recipe Finder 프론트 엔드 코드
-- React 19와 TypeScript를 기반 웹 어플리케이션
+- React 19와 TypeScript 기반의 웹 애플리케이션
 
 ## 주요 기능
 
@@ -12,12 +12,12 @@
 
 ### 아키텍처 및 구현 상세
 
-- **의존성 주입(Dependency Injection)**과 **상태 관리 분리** 전략 사용
+- **의존성 주입(Dependency Injection)** 과 **상태 관리 분리** 전략 사용
 
 ### 1. 의존성 주입 (Dependency Injection, DI)
 
-- `tsyringe` 라이브러리를 사용구현했습니다. 주요 서비스들은 싱글톤으로 관리되며 필요한 계층에 주입
-- 이를 통해 컴포넌트와 서비스 간의 강한 결합을 방지
+- `tsyringe` 라이브러리를 사용하여 구현했습니다. 주요 서비스들은 싱글톤으로 관리되며 필요한 계층에 주입됩니다.
+- 이를 통해 컴포넌트와 서비스 간의 강한 결합을 방지합니다.
 
 -   **Container**: 서비스(레포지토리, HTTP 클라이언트)의 생명주기를 관리
 -   **Resolution**: 컴포넌트는 구체적인 구현체가 아닌 추상화된 의존성을 컨테이너로부터 주입받아 사용
@@ -43,7 +43,7 @@ export default function SearchListView() {
 
 ## 기술 스택
 
--   **React 19**, **TypeScript**, **Vite**
+-   **React 19**, **TypeScript**, **Vite (v7)**
 
 -   **Dependency Injection**: `tsyringe`, `reflect-metadata`
 -   **Routing**: `react-router-dom` (v7)
@@ -53,9 +53,9 @@ export default function SearchListView() {
 
 ## 프로젝트 전체 구조
 
+![Project Architecture](./docs/project-architecture.png)
 
-
-## 프로젝트 구조
+### 디렉토리 구조
 
 계층형 아키텍처(Layered Architecture)를 반영한 디렉토리 구조입니다.
 
@@ -72,6 +72,4 @@ src/
 
 ## 관련 링크
 
-- Github 백엔드 링크
-
-  
+- [Github 백엔드 링크](https://github.com/heo-jin-dev/recipe-finder-api)
