@@ -60,7 +60,7 @@ export default function SearchListView() {
 
 ![Project Architecture](./docs/project-architecture.png)
 
-### 4-1.디렉토리 구조
+### 4-1. 디렉토리 구조
 
 ```text
 src/
