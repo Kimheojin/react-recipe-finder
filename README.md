@@ -75,4 +75,4 @@ src/
 
 ## 5. 관련 링크
 
-- [Github 백엔드 링크](https://github.com/heo-jin-dev/recipe-finder-api)
+- [Github 백엔드 링크](https://github.com/Kimheojin/spring-recipe-backend.git)
