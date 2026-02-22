@@ -16,4 +16,11 @@ export default class HttpRepository {
       .request({ ...config, method: "GET" })
       .then((response) => response as T);
   }
+
+  // interface용 POST 메서드
+  public post<T>(config: HttpRequestConfig): Promise<T> {
+    return this.httpClient
+      .request({ ...config, method: "POST" })
+      .then((response) => response as T);
+  }
 }

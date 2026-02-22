@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { LuExternalLink, LuUtensils } from "react-icons/lu";
+import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
+import { container } from "tsyringe";
 import type SingleRecipeResponse from "../entity/data/recipe/SingleRecipeResponse";
 import type ListSearchRecipeResponse from "../entity/integratedSearch/response/ListSearchRecipeResponse";
+import GuestRepository from "../repository/guest/GuestRepository";
 
 interface SearchResultListProps {
   searchValue: string;
@@ -11,9 +14,17 @@ interface SearchResultListProps {
   error: string | null;
   currentPage: number;
   onPageChange: (page: number) => void;
+  onStatusChange?: () => void; // 상태 변경 시(좋아요 해제 등) 부모에게 알림
 }
 
-function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
+function RecipeCard({ 
+  recipe, 
+  onStatusChange 
+}: { 
+  recipe: SingleRecipeResponse;
+  onStatusChange?: () => void;
+}) {
+  const GUEST_REPO = container.resolve(GuestRepository);
   const ingredients = recipe.ingredientList ?? [];
   const steps = recipe.cookingOrderList ?? [];
   const topIngredients = ingredients.slice(0, 5);
@@ -21,6 +32,47 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
   const [copyFeedback, setCopyFeedback] = useState<
     "idle" | "copied" | "failed"
   >("idle");
+  
+  // 상태 관리
+  const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  useEffect(() => {
+    // 초기 상태 가져오기
+    const checkStatus = async () => {
+      try {
+        const status = await GUEST_REPO.getRecipeStatus(recipe.objectId);
+        setIsLiked(status.liked);
+        setIsBookmarked(status.bookmarked);
+      } catch (err) {
+        console.error("상태 확인 실패:", err);
+      }
+    };
+    checkStatus();
+  }, [recipe.objectId]);
+
+  const handleToggleLike = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await GUEST_REPO.toggleLike(recipe.objectId);
+      setIsLiked(!isLiked);
+      onStatusChange?.();
+    } catch (err) {
+      console.error("좋아요 토글 실패:", err);
+    }
+  };
+
+  const handleToggleBookmark = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await GUEST_REPO.toggleBookmark(recipe.objectId);
+      setIsBookmarked(!isBookmarked);
+      onStatusChange?.();
+    } catch (err) {
+      console.error("북마크 토글 실패:", err);
+    }
+  };
+
   const displayedIngredients = showAllIngredients ? ingredients : topIngredients;
   const hasMoreIngredients = ingredients.length > topIngredients.length;
 
@@ -106,6 +158,32 @@ function RecipeCard({ recipe }: { recipe: SingleRecipeResponse }) {
           </h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {/* 좋아요 토글 */}
+          <button
+            type="button"
+            onClick={handleToggleLike}
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+              isLiked
+                ? "border-[#fde2e2] bg-[#fef2f2] text-[#ef4444]"
+                : "border-[#d7dbe2] text-[#1f2329] hover:border-[#ef4444] hover:text-[#ef4444]"
+            }`}
+          >
+            {isLiked ? <FaHeart /> : <FaRegHeart />}
+          </button>
+
+          {/* 북마크 토글 */}
+          <button
+            type="button"
+            onClick={handleToggleBookmark}
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+              isBookmarked
+                ? "border-[#fff3c7] bg-[#fffcf0] text-[#f59e0b]"
+                : "border-[#d7dbe2] text-[#1f2329] hover:border-[#f59e0b] hover:text-[#f59e0b]"
+            }`}
+          >
+            {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
+          </button>
+
           <button
             type="button"
             onClick={handleCopySource}
@@ -189,6 +267,7 @@ export default function SearchResultList({
   error,
   currentPage,
   onPageChange,
+  onStatusChange,
 }: SearchResultListProps) {
   const location = useLocation();
   const isRecipesPage = location.pathname === "/recipes";
@@ -255,7 +334,11 @@ export default function SearchResultList({
 
       <div className="space-y-5">
         {searchResults.recipes.map((recipe) => (
-          <RecipeCard key={recipe.objectId} recipe={recipe} />
+          <RecipeCard 
+            key={recipe.objectId} 
+            recipe={recipe} 
+            onStatusChange={onStatusChange}
+          />
         ))}
       </div>
 
