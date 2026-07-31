@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { container } from "tsyringe";
 import SearchHeader from "../components/header/SearchHeader";
 import SearchResultList from "../components/SearchResultList";
@@ -7,19 +7,35 @@ import type ListRecipeResponse from "../entity/basicSearch/response/ListRecipeRe
 import type ErrorResponse from "../entity/interface/ErrorResponse";
 import BasicSearchRepository from "../repository/basicSearch/BasicSearchRepository";
 import HttpError from "../http/HttpError";
+import { useRecipeListCacheStore } from "../stores/recipeListCacheStore";
 
 export default function RecipeListView() {
   const BASIC_SEARCH_REPO = container.resolve(BasicSearchRepository);
-  const [recipeData, setRecipeData] = useState<ListRecipeResponse | null>(null);
+
+  const cacheAtMount = useRecipeListCacheStore.getState();
+  const isCacheHit = cacheAtMount.isCacheFresh();
+
+  const [recipeData, setRecipeData] = useState<ListRecipeResponse | null>(
+    isCacheHit ? cacheAtMount.page1Data : null
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageOffset, setPageOffset] = useState(0);
-  const [lastObjectId, setLastObjectId] = useState("");
-  const [totalCount, setTotalCount] = useState(0);
+  const [lastObjectId, setLastObjectId] = useState(
+    isCacheHit ? cacheAtMount.lastObjectId : ""
+  );
+  const [totalCount, setTotalCount] = useState(isCacheHit ? cacheAtMount.totalCount : 0);
   const pageSize = 10;
 
+  const skipInitialCountFetchRef = useRef(isCacheHit);
+  const skipInitialPagingFetchRef = useRef(isCacheHit);
+
   useEffect(() => {
+    if (skipInitialCountFetchRef.current) {
+      return;
+    }
+
     const fetchRecipeCount = async () => {
       try {
         const countData = await BASIC_SEARCH_REPO.getRecipeCount();
@@ -33,6 +49,10 @@ export default function RecipeListView() {
   }, [BASIC_SEARCH_REPO]);
 
   useEffect(() => {
+    if (skipInitialPagingFetchRef.current && pageOffset === 0) {
+      return;
+    }
+
     const fetchRecipes = async () => {
       setLoading(true);
       setError(null);

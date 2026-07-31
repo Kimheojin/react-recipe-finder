@@ -28,4 +28,6 @@ dist-ssr
 .env.*
 guest.md
 GEMINI.md
+CLAUDE.md
+docs/recipe-list-prefetch-review.md
 doc/
