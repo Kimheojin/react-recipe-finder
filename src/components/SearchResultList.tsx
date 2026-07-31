@@ -29,6 +29,7 @@ function RecipeCard({
   const steps = recipe.cookingOrderList ?? [];
   const topIngredients = ingredients.slice(0, 5);
   const [showAllIngredients, setShowAllIngredients] = useState(false);
+  const [showAllSteps, setShowAllSteps] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<
     "idle" | "copied" | "failed"
   >("idle");
@@ -75,6 +76,10 @@ function RecipeCard({
 
   const displayedIngredients = showAllIngredients ? ingredients : topIngredients;
   const hasMoreIngredients = ingredients.length > topIngredients.length;
+
+  const validSteps = steps.filter((step) => step.instruction?.trim());
+  const displayedSteps = showAllSteps ? validSteps : validSteps.slice(0, 1);
+  const hasMoreSteps = validSteps.length > 1;
 
   useEffect(() => {
     if (copyFeedback === "idle") {
@@ -234,26 +239,35 @@ function RecipeCard({
         </div>
       )}
 
-      {steps.some((step) => step.instruction?.trim()) && (
+      {validSteps.length > 0 && (
         <div className="mt-6 rounded-2xl border border-[#eef0f4] bg-[#f9fafb] p-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-[#1f2329]">
             <LuUtensils /> 조리 순서
           </div>
           <ol className="mt-3 space-y-3 text-sm text-[#4b505b]">
-            {steps
-              .filter((step) => step.instruction?.trim())
-              .map((step) => (
-                <li
-                  key={`${recipe.objectId}-${step.step}`}
-                  className="flex items-start gap-3"
-                >
-                  <span className="pill bg-[#2f5bda] text-white flex-shrink-0">
-                    {step.step}
-                  </span>
-                  <p className="leading-6">{step.instruction}</p>
-                </li>
-              ))}
+            {displayedSteps.map((step) => (
+              <li
+                key={`${recipe.objectId}-${step.step}`}
+                className="flex items-start gap-3"
+              >
+                <span className="pill bg-[#2f5bda] text-white flex-shrink-0">
+                  {step.step}
+                </span>
+                <p className="leading-6">{step.instruction}</p>
+              </li>
+            ))}
           </ol>
+          {hasMoreSteps && (
+            <button
+              type="button"
+              onClick={() => setShowAllSteps((prev) => !prev)}
+              className="pill mt-3 bg-[#f5f6f8] text-[#5d636f] transition hover:bg-[#eef1f6]"
+            >
+              {showAllSteps
+                ? "조리 순서 접기"
+                : `+${validSteps.length - 1}단계 더 보기`}
+            </button>
+          )}
         </div>
       )}
     </article>
