@@ -58,7 +58,7 @@ export default function SearchListView() {
 
 ## 4. 프로젝트 전체 구조
 
-![Project Architecture](./docs/project-architecture.png)
+![Project Architecture](./docs/recipe-archi.png)
 
 ### 1) 디렉토리 구조
 
